@@ -1,15 +1,17 @@
 import axios from "axios"
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
-import { useEffect } from "react"
+import { useState, useEffect } from "react";
+import styles from '../pagesDesign/HomePage.module.css';
+
 
 const HomePage = () => {
-
   const [Movies, SetMovies] = useState([]);
   const navigate = useNavigate();
 
+  const URL = import.meta.env.VITE_URL;
+
   useEffect(() => {
-    axios.get('http://192.168.61.103:5000/movies')
+    axios.get(`${URL}:5000/movies`)
       .then(response => SetMovies(response.data))
   }, [])
 
@@ -20,7 +22,7 @@ const HomePage = () => {
   return (
     <>
       {Movies.map(movie => (
-        <div key={movie._id}>
+        <div key={movie._id} className={styles.body}>
           <h1 onClick={() => handleFolderName(movie.folderName)}>{movie.title}</h1>
         </div>
       ))}

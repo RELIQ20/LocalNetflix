@@ -2,9 +2,10 @@ import { useParams } from "react-router-dom"
 
 const VideoPlayer = () => {
 
+  const URL = import.meta.env.VITE_URL;
   const params = useParams()
 
-  const videoSource = `http://192.168.61.103:5000/video/${encodeURIComponent(params.videoPath)}`
+  const videoSource = `${URL}:5000/video/${encodeURIComponent(params.videoPath)}`
   return (
     <>
       <h3>Trying to play: {videoSource}</h3>

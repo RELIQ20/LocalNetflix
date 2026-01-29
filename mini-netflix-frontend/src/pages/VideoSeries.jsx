@@ -8,8 +8,10 @@ const VideoSeries = () => {
   const [episodes, setEpisodes] = useState([]);
   const navigate = useNavigate()
 
+
+  const URL = import.meta.env.VITE_URL;
   useEffect(() => {
-    axios.get(`http://192.168.61.103:5000/files/${params.foldername}`)
+    axios.get(`${URL}:5000/files/${params.foldername}`)
       .then(response => setEpisodes(response.data));
   }, [])
 
