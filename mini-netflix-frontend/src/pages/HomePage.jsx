@@ -2,6 +2,7 @@ import axios from "axios"
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import styles from '../pagesDesign/HomePage.module.css';
+import MovieCard from "../components/MovieCard";
 
 
 const HomePage = () => {
@@ -22,9 +23,15 @@ const HomePage = () => {
   return (
     <>
       {Movies.map(movie => (
-        <div key={movie._id} className={styles.body}>
-          <h1 onClick={() => handleFolderName(movie.folderName)}>{movie.title}</h1>
-        </div>
+        <MovieCard
+          key={movie._id}
+          mainClass={styles.card}
+          image={movie.image}
+          imageClass={styles.poster}
+          onCardClick={() => handleFolderName(movie.folderName)}
+          title={movie.title}
+        />
+
       ))}
     </>
   )

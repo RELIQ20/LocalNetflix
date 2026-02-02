@@ -1,3 +1,12 @@
-body {
+.card {
   font-family: var(--default-font);
+  border: 1px solid red;
+  
+
+  >.poster {
+    border: 1px solid yellow;
+    width: 25%;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+  }
 }
