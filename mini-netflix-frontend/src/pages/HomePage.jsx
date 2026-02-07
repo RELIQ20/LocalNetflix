@@ -22,17 +22,18 @@ const HomePage = () => {
 
   return (
     <>
-      {Movies.map(movie => (
-        <MovieCard
-          key={movie._id}
-          mainClass={styles.card}
-          image={movie.image}
-          imageClass={styles.poster}
-          onCardClick={() => handleFolderName(movie.folderName)}
-          title={movie.title}
-        />
-
-      ))}
+      <div className={styles.container}>
+        {Movies.map(movie => (
+          <MovieCard
+            key={movie._id}
+            mainClass={styles.card}
+            image={movie.image}
+            imageClass={styles.poster}
+            onCardClick={() => handleFolderName(movie.folderName)}
+            title={movie.title}
+          />
+        ))}
+      </div>
     </>
   )
 }

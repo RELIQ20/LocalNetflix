@@ -2,12 +2,12 @@ import placeholder from '../assets/notfound.png'
 
 const MovieCard = ({ mainClass, imageClass, title, onCardClick, image }) => {
   return (
-    <div className={mainClass}>
+    <div className={mainClass} onClick={onCardClick}>
       <img
-        src={image ? image : placeholder}
+        src={placeholder}
         className={imageClass}
       />
-      <h1 onClick={onCardClick}>
+      <h1>
         {title}
       </h1>
     </div>
