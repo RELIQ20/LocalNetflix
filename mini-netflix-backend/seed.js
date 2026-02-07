@@ -17,6 +17,7 @@ const seedMovies = async () => {
         const items = fs.readdirSync(folderPath);
 
         const movieFolders = items.filter(item => {
+
             const fullPath = folderPath + "/" + item;
             return fs.statSync(fullPath).isDirectory();
         });
@@ -26,6 +27,7 @@ const seedMovies = async () => {
         const moviesToSave = movieFolders.map(folderName => {
             return {
                 title: folderName,
+                image: folderName,
                 folderName: folderName,
                 size: 0
             };

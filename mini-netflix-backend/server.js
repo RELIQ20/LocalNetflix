@@ -2,7 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors')
 const path = require('path');
-// const catalogRoute = require('./catalog');
+
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -17,15 +17,15 @@ const Movie = require('./netflix_models/movie');
 const URI = process.env.MONGO_URI1;
 const PORT = process.env.PORT;
 
-// app.use('/api/catalog', catalogRoute);
-
 mongoose.connect(URI)
     .then(() => console.log('Connected to MongoDB cloud'))
     .catch((err) => console.log("MongoDB cloud error:", err))
 
 app.get('/movies', async (req, res) => {
     try {
-        const movie = await Movie.find();
+        const movie = await Movie.find({
+            folderName: { $regex: /^[^/.]/ }
+        });
         res.json(movie);
     }
     catch (err) {
