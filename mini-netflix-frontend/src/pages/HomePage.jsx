@@ -27,7 +27,7 @@ const HomePage = () => {
           <MovieCard
             key={movie._id}
             mainClass={styles.card}
-            image={movie.image}
+            posterImage={movie.posterImage}
             imageClass={styles.poster}
             onCardClick={() => handleFolderName(movie.folderName)}
             title={movie.title}

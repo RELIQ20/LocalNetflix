@@ -5,9 +5,9 @@ const MovieSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    image: {
+    posterImage: {
         type: String,
-        required: false
+        required: true
     },
     folderName: {
         type: String,

@@ -1,10 +1,10 @@
 import placeholder from '../assets/notfound.png'
 
-const MovieCard = ({ mainClass, imageClass, title, onCardClick, image }) => {
+const MovieCard = ({ mainClass, imageClass, title, onCardClick, posterImage }) => {
   return (
     <div className={mainClass} onClick={onCardClick}>
       <img
-        src={placeholder}
+        src={(posterImage && posterImage !== 'N/A') ? posterImage : placeholder}
         className={imageClass}
       />
       <h1>
