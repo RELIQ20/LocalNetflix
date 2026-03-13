@@ -8,8 +8,8 @@ const VideoPlayer = () => {
   const videoSource = `${URL}:5000/video/${encodeURIComponent(params.videoPath)}`
   return (
     <>
-      <h3>Trying to play: {videoSource}</h3>
-      <video key={videoSource} width="800" height="450" controls autoPlay>
+      <h1>Trying to play: {videoSource}</h1>
+      <video key={videoSource} width="800" height="450" disablePictureInPicture controls autoplay controlsList="nodownload" disableRemotePlayback>
         <source src={videoSource} />
       </video>
     </>

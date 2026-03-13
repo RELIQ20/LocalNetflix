@@ -21,7 +21,7 @@ mongoose.connect(URI)
     .then(() => console.log('Connected to MongoDB cloud'))
     .catch((err) => console.log("MongoDB cloud error:", err))
 
-app.get('/movies', async (req, res) => {
+app.get('/movies', async (_req, res) => {
     try {
         const movie = await Movie.find({
             folderName: { $regex: /^[^/.]/ }
@@ -34,12 +34,12 @@ app.get('/movies', async (req, res) => {
     }
 })
 
-app.get('/', (req, res) => {
+app.get('/', (_req, res) => {
     res.send("Welcome to mini-netflix");
     console.log("A user opened the site")
 });
 
-app.get('/files', (req, res) => {
+app.get('/files', (_req, res) => {
     fs.readdir(folderPath, (err, files) => {
         if (err) {
             console.log(err);

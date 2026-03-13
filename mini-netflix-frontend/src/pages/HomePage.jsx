@@ -1,29 +1,37 @@
-import axios from "axios"
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import styles from '../pagesDesign/HomePage.module.css';
+import styles from "../pagesDesign/HomePage.module.css";
 import MovieCard from "../components/MovieCard";
-
+import { Header } from "../components/Header";
+// import { useAuth } from "../context/AuthContext";
 
 const HomePage = () => {
   const [Movies, SetMovies] = useState([]);
   const navigate = useNavigate();
-
+  // const { isLoggedIn } = useAuth(); // Grabs the global state
+  // const [showModal, setShowModal] = useState(false);
   const URL = import.meta.env.VITE_URL;
 
   useEffect(() => {
-    axios.get(`${URL}:5000/movies`)
-      .then(response => SetMovies(response.data))
-  }, [])
+    axios
+      .get(`${URL}:5000/movies`)
+      .then((response) => SetMovies(response.data));
+  }, []);
 
   function handleFolderName(foldername) {
-    navigate(`/folder/${foldername}`)
+    if (!isLoggedIn) {
+      setShowModal(true);
+    } else {
+      navigate(`/folder/${foldername}`);
+    }
   }
 
   return (
     <>
+      <Header />
       <div className={styles.container}>
-        {Movies.map(movie => (
+        {Movies.map((movie) => (
           <MovieCard
             key={movie._id}
             mainClass={styles.card}
@@ -35,7 +43,7 @@ const HomePage = () => {
         ))}
       </div>
     </>
-  )
-}
+  );
+};
 
-export default HomePage
+export default HomePage;
