@@ -1,12 +1,22 @@
 import styles from "../componentCss/Header.module.css";
-import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-export const Header = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+export const Header = ({ isLoggedIn, setIsLoggedIn, setShowLogin }) => {
+  const navigate = useNavigate();
+
+  const handleLoginClick = () => {
+    setShowLogin(true);
+  };
+
+  const handleLogoutClick = () => {
+    setIsLoggedIn(false);
+  };
 
   return (
     <header className={styles.headerContainer}>
-      <div className={styles.logo}>N</div>
+      <div className={styles.logo} onClick={() => navigate("/")}>
+        N
+      </div>
 
       {isLoggedIn && (
         <ul className={styles.mainNav}>
@@ -21,9 +31,12 @@ export const Header = () => {
           <ul className={styles.profileNav}>
             <li>Search</li>
             <li>Profile Avatar</li>
+            <li onClick={handleLogoutClick}>Sign Out</li>
           </ul>
         ) : (
-          <button className={styles.signInButton}>Sign In</button>
+          <button className={styles.signInButton} onClick={handleLoginClick}>
+            Sign In
+          </button>
         )}
       </div>
     </header>

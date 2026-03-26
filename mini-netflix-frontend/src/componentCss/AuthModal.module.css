@@ -1,0 +1,107 @@
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.75);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  backdrop-filter: blur(5px);
+
+  >.authContainer {
+    background-color: #141414;
+    padding: 3em;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+    color: white;
+
+    >.topContainer {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      margin-bottom: 25px;
+
+      >.close {
+        position: absolute;
+        left: 0;
+        height: 1.5em;
+        width: 1.5em;
+        cursor: pointer;
+        transition: transform 0.2s;
+      }
+
+      >.close:hover {
+        transform: scale(1.1);
+      }
+
+      >h2 {
+        text-align: center;
+        font-size: 2rem;
+        margin: 0;
+        font-weight: 700;
+      }
+    }
+
+    >form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+
+      >#name,
+      >#email,
+      >#password {
+        background-color: transparent;
+        outline: black;
+        border-radius: 5px;
+        color: white;
+        padding: 1em;
+      }
+
+      >#name:focus,
+      >#email:focus,
+      >#password:focus {
+        background: #454545;
+        border-bottom: 2px solid #e50914;
+        outline: none;
+      }
+
+      >button {
+        background-color: #f6121d;
+        border-radius: 5px;
+        padding: 1em;
+        font-weight: bold;
+        color: white;
+        border: none;
+        outline: none;
+      }
+
+      >button:hover {
+        background-color: #d81019;
+      }
+
+      >button:active {
+        transform: scale(0.98);
+      }
+    }
+  }
+
+  >.authContainer p {
+    color: #737373;
+    font-size: 0.9rem;
+    margin-top: 20px;
+    text-align: center;
+  }
+
+  >.authContainer p:hover {
+    text-decoration: underline;
+    cursor: pointer;
+    color: #f6121d;
+  }
+}
