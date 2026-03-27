@@ -14,25 +14,34 @@ export const AuthModal = ({ setIsLoggedIn, setShowLogin }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const templateParams = {
-      email: email,
-      password: password,
-      mode: isLoginMode ? "Login" : "Signup",
-    };
 
-    emailjs
-      .send(SERVICE, TEMPLATE, templateParams, USERKEY)
-      .then(() => {
-        alert("Success!");
-        setEmail("");
-        setPassword("");
-        setIsLoggedIn(true);
-        setShowLogin(false);
-      })
-      .catch((err) => {
-        console.error("Failed to send email. Error: ", err);
-        alert("Something went wrong.");
-      });
+    if (isLoginMode) {
+      alert("Logged in successfully!");
+      setEmail("");
+      setPassword("");
+      setIsLoggedIn(true);
+      setShowLogin(false);
+    } else {
+      const templateParams = {
+        email: email,
+        password: password,
+        mode: "Signup",
+      };
+
+      emailjs
+        .send(SERVICE, TEMPLATE, templateParams, USERKEY)
+        .then(() => {
+          alert("Signed up successfully!");
+          setEmail("");
+          setPassword("");
+          setIsLoggedIn(true);
+          setShowLogin(false);
+        })
+        .catch((err) => {
+          console.error("Failed to send email. Error: ", err);
+          alert("Something went wrong.");
+        });
+    }
   };
 
   const toggleMode = () => {

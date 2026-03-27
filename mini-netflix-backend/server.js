@@ -1,84 +1,107 @@
-require('dotenv').config();
-const express = require('express');
-const cors = require('cors')
-const path = require('path');
+require("dotenv").config();
+const express = require("express");
+const cors = require("cors");
+const path = require("path");
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-const fs = require('fs');
-const folderPath = 'D:/Movies';
+const fs = require("fs");
+const folderPath = "D:/Movies";
 
-const mongoose = require('mongoose');
-const Movie = require('./netflix_models/movie');
-
+const mongoose = require("mongoose");
+const Movie = require("./netflix_models/movie");
 
 const URI = process.env.MONGO_URI1;
 const PORT = process.env.PORT;
 
-mongoose.connect(URI)
-    .then(() => console.log('Connected to MongoDB cloud'))
-    .catch((err) => console.log("MongoDB cloud error:", err))
+mongoose
+    .connect(URI)
+    .then(() => console.log("Connected to MongoDB cloud"))
+    .catch((err) => console.log("MongoDB cloud error:", err));
 
-app.get('/movies', async (_req, res) => {
+app.get("/movies", async (_req, res) => {
     try {
         const movie = await Movie.find({
-            folderName: { $regex: /^[^/.]/ }
+            folderName: { $regex: /^[^/.]/ },
         });
         res.json(movie);
-    }
-    catch (err) {
+    } catch (err) {
         console.log(err);
-        res.status(500).send('Server Error');
+        res.status(500).send("Server Error");
     }
-})
-
-app.get('/', (_req, res) => {
-    res.send("Welcome to mini-netflix");
-    console.log("A user opened the site")
 });
 
-app.get('/files', (_req, res) => {
+app.get("/", (_req, res) => {
+    res.send("Welcome to mini-netflix");
+    console.log("A user opened the site");
+});
+
+app.get("/files", (_req, res) => {
     fs.readdir(folderPath, (err, files) => {
         if (err) {
             console.log(err);
-            return res.status(500).send('Could not retrieve movies');
-        }
-        res.json(files)
-    })
-})
-
-app.get('/files/:folderName', (req, res) => {
-    const folderName = req.params.folderName;
-    const subFolderPath = path.join(folderPath, folderName);
-
-    // check if the folder exists first
-    if (!fs.existsSync(subFolderPath)) {
-        return res.status(404).send('Folder not found');
-    }
-
-    fs.readdir(subFolderPath, (err, files) => {
-        if (err) {
-            console.log(err);
-            return res.status(500).send('Could not open folder');
+            return res.status(500).send("Could not retrieve movies");
         }
         res.json(files);
     });
 });
 
-app.get('/video/:filename', (req, res) => {
+app.get("/files/:folderName", async (req, res) => {
+    const folderName = req.params.folderName;
+    const subFolderPath = path.join(folderPath, folderName);
+
+    try {
+        // 1. RECYCLE YOUR DB LOGIC:
+        // Find the single movie in MongoDB that matches this folder name
+        const movieData = await Movie.findOne({ folderName: folderName });
+
+        // 2. CHECK THE HARD DRIVE:
+        if (!fs.existsSync(subFolderPath)) {
+            return res.status(404).send("Folder not found");
+        }
+
+        fs.readdir(subFolderPath, (err, files) => {
+            if (err) {
+                console.log(err);
+                return res.status(500).send("Could not open folder");
+            }
+            const videoFiles = files.filter(
+                (file) => file.endsWith(".mp4") || file.endsWith(".mkv"),
+            );
+
+            const combinedData = videoFiles.map((file, index) => {
+                return {
+                    _id: movieData ? movieData._id.toString() + index : index,
+                    title: movieData ? movieData.title : file,
+                    posterImage: movieData ? movieData.posterImage : "N/A",
+                    plot: movieData ? movieData.plot : "No synopsis available.",
+                    fileName: file,
+                };
+            });
+            res.json(combinedData);
+        });
+    } catch (error) {
+        // Catch any MongoDB errors
+        console.error("Database error:", error);
+        res.status(500).send("Server Error");
+    }
+});
+app.get("/video/:filename", (req, res) => {
     const fileName = req.params.filename;
 
     let filePath = folderPath + "/" + fileName;
 
     if (!fs.existsSync(filePath)) {
-        return res.status(404).send('File not Found!');
+        return res.status(404).send("File not Found!");
     }
 
     if (fs.statSync(filePath).isDirectory()) {
         const filesInside = fs.readdirSync(filePath);
-        const actualVideo = filesInside.find(file => file.endsWith('.mp4') || file.endsWith('.mkv'));
+        const actualVideo = filesInside.find(
+            (file) => file.endsWith(".mp4") || file.endsWith(".mkv"),
+        );
 
         if (actualVideo) {
             filePath = filePath + "/" + actualVideo;
@@ -96,7 +119,7 @@ app.get('/video/:filename', (req, res) => {
     const start = Number(range.replace(/\D/g, ""));
     const end = Math.min(start + CHUNK_SIZE, videoSize - 1);
 
-    const mimeType = filePath.endsWith('.mkv') ? 'video/x-matroska' : 'video/mp4';
+    const mimeType = filePath.endsWith(".mkv") ? "video/x-matroska" : "video/mp4";
 
     const contentLength = end - start + 1;
     const headers = {
@@ -112,4 +135,4 @@ app.get('/video/:filename', (req, res) => {
     videoStream.pipe(res);
 });
 
-app.listen(PORT, () => console.log('The server is now starting!', PORT))
+app.listen(PORT, () => console.log("The server is now starting!", PORT));
