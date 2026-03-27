@@ -67,9 +67,7 @@ app.get("/files/:folderName", async (req, res) => {
                 console.log(err);
                 return res.status(500).send("Could not open folder");
             }
-            const videoFiles = files.filter(
-                (file) => file.endsWith(".mp4") || file.endsWith(".mkv"),
-            );
+            const videoFiles = files.filter((file) => file.endsWith(".mp4"));
 
             const combinedData = videoFiles.map((file, index) => {
                 return {
@@ -83,7 +81,6 @@ app.get("/files/:folderName", async (req, res) => {
             res.json(combinedData);
         });
     } catch (error) {
-        // Catch any MongoDB errors
         console.error("Database error:", error);
         res.status(500).send("Server Error");
     }
@@ -99,9 +96,7 @@ app.get("/video/:filename", (req, res) => {
 
     if (fs.statSync(filePath).isDirectory()) {
         const filesInside = fs.readdirSync(filePath);
-        const actualVideo = filesInside.find(
-            (file) => file.endsWith(".mp4") || file.endsWith(".mkv"),
-        );
+        const actualVideo = filesInside.find((file) => file.endsWith(".mp4"));
 
         if (actualVideo) {
             filePath = filePath + "/" + actualVideo;

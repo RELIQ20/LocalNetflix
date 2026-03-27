@@ -20,7 +20,6 @@ export const Header = ({ isLoggedIn, setIsLoggedIn, setShowLogin }) => {
 
       {isLoggedIn && (
         <ul className={styles.mainNav}>
-          <li>Home</li>
           <li>TV Shows</li>
           <li>Movies</li>
           <li>My List</li>
